@@ -201,27 +201,110 @@
 }
 
 @layer components {
-  /* Glassmorphism Card */
+  /* Enhanced Glassmorphism Card */
   .glass {
     background: hsl(var(--glass-bg));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--glass-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass:hover {
+    box-shadow: var(--shadow-xl), 0 0 40px -15px hsl(var(--primary) / 0.3);
+    border-color: hsl(var(--primary) / 0.2);
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(calc(var(--glass-blur) + 5px)) saturate(140%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 5px)) saturate(140%);
   }
 
   .glass-strong {
     background: hsl(var(--glass-bg));
-    backdrop-filter: blur(30px) saturate(150%);
-    -webkit-backdrop-filter: blur(30px) saturate(150%);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: 1px solid hsl(var(--glass-border));
     box-shadow: var(--glass-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Bento Card Styles */
+  .glass-strong:hover {
+    box-shadow: var(--shadow-xl), 0 0 60px -20px hsl(var(--primary) / 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Glass Card with enhanced hover */
+  .glass-card {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: 
+      var(--glass-shadow),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.05);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0) 0%,
+      hsl(var(--primary) / 0.05) 50%,
+      hsl(var(--accent) / 0) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glass-card:hover {
+    box-shadow: 
+      var(--shadow-xl),
+      0 0 50px -15px hsl(var(--primary) / 0.35),
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.1);
+    border-color: hsl(var(--primary) / 0.3);
+    transform: translateY(-4px);
+  }
+
+  .glass-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Bento Card Styles - Enhanced */
   .bento-card {
-    @apply glass rounded-2xl p-6 transition-all duration-300;
-    @apply hover:scale-[1.02] hover:shadow-xl;
+    @apply glass rounded-3xl p-6;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bento-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      hsl(var(--primary) / 0.15) 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .bento-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 25px 50px -12px hsl(var(--primary) / 0.15),
+      0 0 0 1px hsl(var(--primary) / 0.1);
+  }
+
+  .bento-card:hover::after {
+    opacity: 1;
   }
 
   .bento-card-lg {
@@ -236,12 +319,19 @@
     @apply bento-card row-span-2;
   }
 
-  /* Gradient Text */
+  /* Gradient Text with shimmer */
   .gradient-text {
     background: var(--gradient-primary);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: gradient-shimmer 3s ease infinite;
+  }
+
+  @keyframes gradient-shimmer {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
   }
 
   /* Gradient Border */
@@ -263,7 +353,7 @@
     mask-composite: exclude;
   }
 
-  /* Glow Effect */
+  /* Enhanced Glow Effect */
   .glow {
     position: relative;
   }
@@ -275,13 +365,51 @@
     background: var(--gradient-primary);
     border-radius: inherit;
     opacity: 0;
-    filter: blur(15px);
-    transition: opacity 0.3s ease;
+    filter: blur(20px);
+    transition: opacity 0.4s ease, filter 0.4s ease;
     z-index: -1;
   }
 
   .glow:hover::after {
-    opacity: 0.5;
+    opacity: 0.6;
+    filter: blur(25px);
+  }
+
+  /* Dot Grid Background */
+  .dot-grid {
+    background-image: radial-gradient(
+      circle at center,
+      hsl(var(--primary) / 0.15) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  /* Subtle Grid Lines */
+  .grid-lines {
+    background-size: 80px 80px;
+    background-image: 
+      linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
+  }
+
+  /* Radial glow from center */
+  .bg-radial-glow {
+    background: radial-gradient(
+      ellipse 80% 50% at 50% 50%,
+      hsl(var(--primary) / 0.08) 0%,
+      transparent 60%
+    );
+  }
+
+  /* Vignette effect */
+  .bg-vignette {
+    background: radial-gradient(
+      ellipse at center,
+      transparent 0%,
+      transparent 50%,
+      hsl(var(--background) / 0.4) 100%
+    );
   }
 
   /* Animated Grid Background */
