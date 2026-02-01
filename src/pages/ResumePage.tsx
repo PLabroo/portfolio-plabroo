@@ -15,7 +15,7 @@ export default function ResumePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 px-1">
       {/* Header */}
       <motion.section
         variants={staggerContainer}
@@ -25,19 +25,19 @@ export default function ResumePage() {
       >
         <motion.span 
           variants={staggerItem}
-          className="inline-block px-4 py-1.5 rounded-full glass text-sm font-medium text-primary mb-6"
+          className="inline-block px-4 py-1.5 rounded-full glass-card text-sm font-medium text-primary mb-4 sm:mb-6"
         >
           Resume
         </motion.span>
         <motion.h1 
           variants={staggerItem}
-          className="text-4xl sm:text-5xl font-display font-bold mb-4"
+          className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-2 sm:mb-4"
         >
-          {hero.name}
+          <span className="gradient-text">{hero.name}</span>
         </motion.h1>
         <motion.p 
           variants={staggerItem}
-          className="text-xl text-muted-foreground"
+          className="text-base sm:text-xl text-muted-foreground"
         >
           {hero.title}
         </motion.p>
@@ -62,86 +62,92 @@ export default function ResumePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="glass rounded-3xl p-8 lg:p-10 space-y-8 print:shadow-none print:p-0"
+        className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 xl:p-10 space-y-6 sm:space-y-8 print:shadow-none print:p-0"
       >
         {/* Contact Info */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm pb-6 border-b border-border/50">
-          <a href={`mailto:${contact.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-            <Mail className="h-4 w-4" />
-            {contact.email}
+        <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm pb-4 sm:pb-6 border-b border-border/30">
+          <a href={`mailto:${contact.email}`} className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors">
+            <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <span className="truncate max-w-[150px] sm:max-w-none">{contact.email}</span>
           </a>
           {contact.phone && (
-            <a href={`tel:${contact.phone}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-              <Phone className="h-4 w-4" />
+            <a href={`tel:${contact.phone}`} className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors">
+              <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               {contact.phone}
             </a>
           )}
-          <span className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
+          <span className="flex items-center gap-1.5 sm:gap-2">
+            <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             {contact.location}
           </span>
           <a 
             href={socialLinks.find(l => l.platform === 'linkedin')?.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-primary transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
           >
-            <Linkedin className="h-4 w-4" />
+            <Linkedin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             LinkedIn
           </a>
           <a 
             href={socialLinks.find(l => l.platform === 'github')?.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-primary transition-colors"
+            className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
           >
-            <Github className="h-4 w-4" />
+            <Github className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             GitHub
           </a>
         </div>
 
         {/* Summary */}
         <section>
-          <h2 className="text-xl font-display font-bold mb-3 text-primary">Professional Summary</h2>
-          <p className="text-muted-foreground leading-relaxed">
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">Professional Summary</h2>
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             {hero.description}
           </p>
         </section>
 
         {/* Experience */}
         <section>
-          <h2 className="text-xl font-display font-bold mb-4 text-primary">Experience</h2>
-          <div className="space-y-6">
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">Experience</h2>
+          <div className="space-y-4 sm:space-y-6">
             {experience.map((exp) => (
-              <div key={exp.id}>
-                <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+              <motion.div 
+                key={exp.id}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="p-3 sm:p-4 rounded-xl bg-muted/20 hover:bg-muted/30 transition-colors"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 mb-2">
                   <div>
-                    <h3 className="font-bold">{exp.role}</h3>
-                    <p className="text-primary">{exp.company} • {exp.industry}</p>
+                    <h3 className="font-bold text-sm sm:text-base">{exp.role}</h3>
+                    <p className="text-primary text-xs sm:text-sm">{exp.company} • {exp.industry}</p>
                   </div>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">
                     {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
                   </span>
                 </div>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                  {exp.description.map((item, i) => (
+                <ul className="space-y-1 text-xs sm:text-sm text-muted-foreground">
+                  {exp.description.slice(0, 3).map((item, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-primary mt-1.5">•</span>
-                      {item}
+                      <span className="text-primary mt-1">•</span>
+                      <span className="line-clamp-2">{item}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* Skills */}
         <section>
-          <h2 className="text-xl font-display font-bold mb-4 text-primary">Skills</h2>
-          <div className="space-y-3">
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">Skills</h2>
+          <div className="space-y-2 sm:space-y-3">
             {skillCategories.map((category) => (
-              <div key={category.name}>
+              <div key={category.name} className="text-sm sm:text-base">
                 <span className="font-semibold">{category.name}: </span>
                 <span className="text-muted-foreground">
                   {category.skills.map(s => s.name).join(', ')}
@@ -153,13 +159,13 @@ export default function ResumePage() {
 
         {/* Education */}
         <section>
-          <h2 className="text-xl font-display font-bold mb-3 text-primary">Education</h2>
-          <div className="flex flex-wrap items-start justify-between gap-2">
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">Education</h2>
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2">
             <div>
-              <h3 className="font-bold">Bachelor of Technology</h3>
-              <p className="text-muted-foreground">Aryabhatta Knowledge University</p>
+              <h3 className="font-bold text-sm sm:text-base">Bachelor of Technology</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">Aryabhatta Knowledge University</p>
             </div>
-            <span className="text-sm text-muted-foreground">Aug 2017 – Oct 2021</span>
+            <span className="text-xs sm:text-sm text-muted-foreground">Aug 2017 – Oct 2021</span>
           </div>
         </section>
       </motion.div>

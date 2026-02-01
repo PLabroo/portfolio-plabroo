@@ -45,16 +45,16 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="space-y-20 lg:space-y-32">
+    <div className="space-y-12 sm:space-y-16 lg:space-y-24 px-1">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center">
-        {/* Decorative floating elements */}
+      <section className="relative min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh] flex items-center py-6 sm:py-8">
+        {/* Decorative floating elements - hidden on mobile for performance */}
         <motion.div
-          className="absolute top-20 right-10 w-20 h-20 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 blur-2xl"
+          className="absolute top-20 right-10 w-16 sm:w-20 h-16 sm:h-20 rounded-full bg-gradient-to-br from-primary/30 to-accent/30 blur-2xl hidden sm:block"
           animate={floatingAnimation}
         />
         <motion.div
-          className="absolute bottom-40 left-10 w-32 h-32 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 blur-3xl"
+          className="absolute bottom-40 left-10 w-24 sm:w-32 h-24 sm:h-32 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 blur-3xl hidden sm:block"
           animate={floatingAnimationDelayed}
         />
         
@@ -62,18 +62,18 @@ export default function HomePage() {
           variants={staggerContainer}
           initial="hidden"
           animate="show"
-          className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full"
+          className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center w-full"
         >
           {/* Left Content */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             <motion.div variants={staggerItem}>
               <motion.span 
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-medium text-primary"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full glass-card text-xs sm:text-sm font-medium text-primary"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 400 }}
               >
                 <motion.span 
-                  className="w-2 h-2 rounded-full bg-green-500"
+                  className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-green-500"
                   animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
@@ -83,10 +83,10 @@ export default function HomePage() {
 
             <motion.h1 
               variants={staggerItem}
-              className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold tracking-tight"
             >
               <motion.span 
-                className="text-muted-foreground text-lg sm:text-xl block mb-3"
+                className="text-muted-foreground text-sm sm:text-lg lg:text-xl block mb-2 sm:mb-3"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -104,24 +104,24 @@ export default function HomePage() {
 
             <motion.p 
               variants={staggerItem}
-              className="text-xl sm:text-2xl lg:text-3xl font-display text-foreground/80"
+              className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display text-foreground/80"
             >
               {hero.tagline}
             </motion.p>
 
             <motion.p 
               variants={staggerItem}
-              className="text-muted-foreground text-lg max-w-lg leading-relaxed"
+              className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-lg leading-relaxed"
             >
               {hero.description}
             </motion.p>
 
-            <motion.div variants={staggerItem} className="flex flex-wrap gap-4 pt-2">
-              <Button asChild size="lg" className="group relative overflow-hidden">
+            <motion.div variants={staggerItem} className="flex flex-wrap gap-3 sm:gap-4 pt-2">
+              <Button asChild size="default" className="group relative overflow-hidden text-sm sm:text-base">
                 <Link to={hero.ctaPrimary.href}>
                   <span className="relative z-10 flex items-center">
                     {hero.ctaPrimary.label}
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 h-3.5 w-3.5 sm:h-4 sm:w-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity"
@@ -129,7 +129,7 @@ export default function HomePage() {
                   />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="group glass">
+              <Button asChild variant="outline" size="default" className="group glass text-sm sm:text-base">
                 <Link to={hero.ctaSecondary.href}>
                   {hero.ctaSecondary.label}
                 </Link>
@@ -137,7 +137,7 @@ export default function HomePage() {
             </motion.div>
 
             {/* Social Links */}
-            <motion.div variants={staggerItem} className="flex items-center gap-3 pt-4">
+            <motion.div variants={staggerItem} className="flex items-center gap-2 sm:gap-3 pt-2 sm:pt-4">
               {portfolioData.socialLinks.map((link, index) => {
                 const icons = {
                   github: Github,
@@ -153,7 +153,7 @@ export default function HomePage() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 rounded-xl glass-card hover:text-primary transition-colors"
+                    className="p-2.5 sm:p-3 rounded-lg sm:rounded-xl glass-card hover:text-primary transition-colors"
                     aria-label={link.label}
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     whileTap={{ scale: 0.95 }}
@@ -161,7 +161,7 @@ export default function HomePage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 + index * 0.1 }}
                   >
-                    <Icon className="h-5 w-5" />
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </motion.a>
                 );
               })}
@@ -169,7 +169,7 @@ export default function HomePage() {
           </div>
 
           {/* Right Content - Code Snippet & Stats */}
-          <motion.div variants={staggerItem} className="space-y-6">
+          <motion.div variants={staggerItem} className="space-y-4 sm:space-y-6">
             <TypingCodeBlock
               filename={hero.codeSnippet.filename}
               code={hero.codeSnippet.code}
@@ -177,7 +177,7 @@ export default function HomePage() {
             />
 
             {/* Highlight Stats */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
               {hero.highlights.map((highlight, index) => (
                 <StatCard
                   key={index}
