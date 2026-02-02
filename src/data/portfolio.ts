@@ -29,6 +29,7 @@ export const portfolioData: PortfolioData = {
 
   moreNavigation: [
     { label: 'Skills', href: '/skills', icon: 'Sparkles', description: 'Technical expertise' },
+    { label: 'System Design', href: '/system-design', icon: 'Layers', description: 'Architecture & patterns' },
     { label: 'Blog', href: '/blog', icon: 'PenTool', description: 'Thoughts and tutorials' },
     { label: 'Resume', href: '/resume', icon: 'FileText', description: 'Download my CV' },
     { label: 'Uses', href: '/uses', icon: 'Laptop', description: 'Tools I use' },
