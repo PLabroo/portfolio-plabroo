@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { BentoCard } from '@/components/ui/bento-card';
 import { TypingCodeBlock } from '@/components/ui/typing-code-block';
 import { StatCard } from '@/components/ui/stat-card';
+import { GitHubStats, LeetCodeStats } from '@/components/stats';
 
 const floatingAnimation = {
   y: [-10, 10, -10],
@@ -414,6 +415,29 @@ export default function HomePage() {
           <Button asChild variant="outline" className="w-full">
             <Link to="/projects">View all projects</Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Coding Profiles Section - GitHub & LeetCode */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4">
+            Coding <span className="gradient-text">Profiles</span>
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl">
+            Live stats from my coding journey across platforms
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          <GitHubStats username="vaibhavkumarswe" />
+          <LeetCodeStats username="vaibhavkumarswe" />
         </div>
       </section>
 
