@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Download, Github, Linkedin, Code2, ExternalLink, Sparkles, Zap, Rocket, Coffee } from 'lucide-react';
+import { ArrowRight, Download, Github, Linkedin, Code2, ExternalLink, Sparkles, Zap, Rocket, Coffee, Layers } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { portfolioData } from '@/data/portfolio';
 import { staggerContainer, staggerItem } from '@/components/layout/PageTransition';
@@ -8,6 +8,7 @@ import { BentoCard } from '@/components/ui/bento-card';
 import { TypingCodeBlock } from '@/components/ui/typing-code-block';
 import { StatCard } from '@/components/ui/stat-card';
 import { GitHubStats, LeetCodeStats } from '@/components/stats';
+import { Achievements, TechnicalLeadership } from '@/components/sections';
 
 const floatingAnimation = {
   y: [-10, 10, -10],
@@ -333,6 +334,43 @@ export default function HomePage() {
         </motion.div>
       </section>
 
+      {/* Technical Leadership Section */}
+      <section>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4">
+            Technical <span className="gradient-text">Leadership</span>
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl">
+            Leading teams, mentoring engineers, and driving technical excellence
+          </p>
+        </motion.div>
+
+        <TechnicalLeadership />
+
+        {/* System Design CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-6"
+        >
+          <Button asChild variant="outline" className="group glass">
+            <Link to="/system-design">
+              <Layers className="mr-2 h-4 w-4" />
+              Explore System Design
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+        </motion.div>
+      </section>
+
       {/* Featured Projects - Enhanced */}
       <section>
         <motion.div
@@ -435,10 +473,13 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
+        <div className="grid lg:grid-cols-2 gap-6 mb-6">
           <GitHubStats username="vaibhavkumarswe" />
           <LeetCodeStats username="vaibhavkumarswe" />
         </div>
+
+        {/* Achievements Section */}
+        <Achievements />
       </section>
 
       {/* Process Section - Enhanced */}
