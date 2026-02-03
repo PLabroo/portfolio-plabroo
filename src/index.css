@@ -379,25 +379,51 @@
   .dot-grid {
     background-image: radial-gradient(
       circle at center,
-      hsl(var(--primary) / 0.15) 1px,
-      transparent 1px
+      hsl(var(--primary) / 0.2) 1.5px,
+      transparent 1.5px
     );
-    background-size: 24px 24px;
+    background-size: 32px 32px;
   }
 
-  /* Subtle Grid Lines */
+  /* Primary Grid Lines - More Visible */
   .grid-lines {
-    background-size: 80px 80px;
+    background-size: 60px 60px;
     background-image: 
-      linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
+      linear-gradient(to right, hsl(var(--primary) / 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+  }
+
+  /* Large Grid Overlay */
+  .grid-large {
+    background-size: 120px 120px;
+    background-image: 
+      linear-gradient(to right, hsl(var(--primary) / 0.12) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.12) 1px, transparent 1px);
+  }
+
+  /* Fine Grid Pattern */
+  .grid-fine {
+    background-size: 20px 20px;
+    background-image: 
+      linear-gradient(to right, hsl(var(--border) / 0.2) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.2) 1px, transparent 1px);
+  }
+
+  /* Combined Grid Pattern */
+  .grid-pattern {
+    background:
+      linear-gradient(to right, hsl(var(--primary) / 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.06) 1px, transparent 1px),
+      linear-gradient(to right, hsl(var(--primary) / 0.12) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.12) 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 80px 80px, 80px 80px;
   }
 
   /* Radial glow from center */
   .bg-radial-glow {
     background: radial-gradient(
       ellipse 80% 50% at 50% 50%,
-      hsl(var(--primary) / 0.08) 0%,
+      hsl(var(--primary) / 0.1) 0%,
       transparent 60%
     );
   }
@@ -408,7 +434,7 @@
       ellipse at center,
       transparent 0%,
       transparent 50%,
-      hsl(var(--background) / 0.4) 100%
+      hsl(var(--background) / 0.5) 100%
     );
   }
 
@@ -416,9 +442,19 @@
   .grid-background {
     background-size: 60px 60px;
     background-image: 
-      linear-gradient(to right, hsl(var(--border) / 0.3) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--border) / 0.3) 1px, transparent 1px);
+      linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px);
     animation: grid-float 20s ease-in-out infinite;
+  }
+
+  /* Perspective Grid (3D effect) */
+  .grid-perspective {
+    background: 
+      linear-gradient(hsl(var(--primary) / 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg);
+    transform-origin: center top;
   }
 
   /* Noise Overlay */
