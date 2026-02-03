@@ -9,8 +9,59 @@ interface BentoCardProps {
   icon?: React.ReactNode;
   className?: string;
   delay?: number;
-  variant?: 'default' | 'gradient' | 'glow';
+  variant?: 'default' | 'gradient' | 'glow' | 'cyan' | 'emerald' | 'rose' | 'amber' | 'violet';
 }
+
+const variantStyles = {
+  default: {
+    bg: '',
+    glow: 'from-primary/20 to-accent/20',
+    iconBg: 'bg-primary/10',
+    iconColor: 'text-primary',
+  },
+  gradient: {
+    bg: 'bg-gradient-to-br from-primary/10 via-accent/5 to-cyan/10',
+    glow: 'from-primary/30 to-accent/30',
+    iconBg: 'bg-gradient-to-br from-primary/20 to-accent/20',
+    iconColor: 'text-primary',
+  },
+  glow: {
+    bg: '',
+    glow: 'from-primary/25 to-cyan/25',
+    iconBg: 'bg-primary/10',
+    iconColor: 'text-primary',
+  },
+  cyan: {
+    bg: 'bg-gradient-to-br from-cyan/10 to-emerald/5',
+    glow: 'from-cyan/30 to-emerald/30',
+    iconBg: 'bg-cyan/10',
+    iconColor: 'text-cyan',
+  },
+  emerald: {
+    bg: 'bg-gradient-to-br from-emerald/10 to-cyan/5',
+    glow: 'from-emerald/30 to-cyan/30',
+    iconBg: 'bg-emerald/10',
+    iconColor: 'text-emerald',
+  },
+  rose: {
+    bg: 'bg-gradient-to-br from-rose/10 to-orange/5',
+    glow: 'from-rose/30 to-orange/30',
+    iconBg: 'bg-rose/10',
+    iconColor: 'text-rose',
+  },
+  amber: {
+    bg: 'bg-gradient-to-br from-amber/10 to-orange/5',
+    glow: 'from-amber/30 to-orange/30',
+    iconBg: 'bg-amber/10',
+    iconColor: 'text-amber',
+  },
+  violet: {
+    bg: 'bg-gradient-to-br from-violet/10 to-accent/5',
+    glow: 'from-violet/30 to-accent/30',
+    iconBg: 'bg-violet/10',
+    iconColor: 'text-violet',
+  },
+};
 
 export function BentoCard({ 
   title, 
@@ -30,6 +81,8 @@ export function BentoCard({
 
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["4deg", "-4deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-4deg", "4deg"]);
+
+  const styles = variantStyles[variant];
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -69,14 +122,17 @@ export function BentoCard({
       onMouseLeave={handleMouseLeave}
       className={cn(
         "glass-card rounded-3xl p-6 relative overflow-hidden group cursor-default",
-        variant === 'gradient' && "bg-gradient-to-br from-primary/10 to-accent/10",
+        styles.bg,
         variant === 'glow' && "glow",
         className
       )}
     >
       {/* Animated gradient overlay on hover */}
       <motion.div 
-        className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/5 to-accent/0 opacity-0 group-hover:opacity-100"
+        className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100",
+          styles.glow.replace('from-', 'from-').replace('/30', '/10').replace('/25', '/10')
+        )}
         initial={false}
         transition={{ duration: 0.5 }}
       />
@@ -90,7 +146,11 @@ export function BentoCard({
       <div className="relative z-10" style={{ transform: "translateZ(30px)" }}>
         {icon && (
           <motion.div 
-            className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 text-primary"
+            className={cn(
+              "w-12 h-12 rounded-2xl flex items-center justify-center mb-4",
+              styles.iconBg,
+              styles.iconColor
+            )}
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
@@ -110,7 +170,10 @@ export function BentoCard({
 
       {/* Decorative animated element */}
       <motion.div 
-        className="absolute -bottom-12 -right-12 w-40 h-40 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 blur-3xl"
+        className={cn(
+          "absolute -bottom-12 -right-12 w-40 h-40 rounded-full blur-3xl bg-gradient-to-br",
+          styles.glow
+        )}
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -123,7 +186,10 @@ export function BentoCard({
       />
       
       {/* Corner accent */}
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className={cn(
+        "absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl to-transparent rounded-bl-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500",
+        styles.glow.replace('from-', 'from-').replace('/30', '/20').replace('/25', '/20')
+      )} />
     </motion.div>
   );
 }

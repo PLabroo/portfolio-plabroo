@@ -77,6 +77,14 @@ export default function ProjectsPage() {
           const isLarge = project.featured && index === 0;
           const isMedium = project.featured && index !== 0;
           
+          const cardColors = [
+            { gradient: 'from-primary/20 via-accent/10 to-cyan/10', accent: 'primary' },
+            { gradient: 'from-cyan/20 via-emerald/10 to-primary/10', accent: 'cyan' },
+            { gradient: 'from-rose/20 via-orange/10 to-amber/10', accent: 'rose' },
+            { gradient: 'from-violet/20 via-accent/10 to-primary/10', accent: 'violet' },
+          ];
+          const cardColor = cardColors[index % cardColors.length];
+          
           return (
             <motion.article
               key={project.id}
@@ -93,7 +101,8 @@ export default function ProjectsPage() {
             >
               {/* Gradient Background */}
               <div className={cn(
-                "bg-gradient-to-br from-primary/20 via-accent/10 to-primary/5 relative overflow-hidden",
+                "relative overflow-hidden bg-gradient-to-br",
+                cardColor.gradient,
                 isLarge ? "h-48 sm:h-64 lg:h-80" : "h-32 sm:h-40"
               )}>
                 {/* Animated gradient overlay */}
@@ -103,9 +112,14 @@ export default function ProjectsPage() {
                 
                 {/* Floating decorative elements */}
                 <motion.div
-                  className="absolute top-4 right-4 w-20 h-20 rounded-full bg-primary/10 blur-xl"
+                  className="absolute top-4 right-4 w-20 h-20 rounded-full bg-white/10 blur-xl"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
                   transition={{ duration: 4, repeat: Infinity }}
+                />
+                <motion.div
+                  className="absolute bottom-8 left-8 w-16 h-16 rounded-full bg-white/10 blur-lg"
+                  animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 5, repeat: Infinity, delay: 1 }}
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
@@ -113,7 +127,7 @@ export default function ProjectsPage() {
                 {/* Category & Featured Badge */}
                 <div className="absolute bottom-3 sm:bottom-4 left-4 sm:left-6 flex items-center gap-2">
                   <motion.span 
-                    className="tag text-xs flex items-center gap-1"
+                    className="tag text-xs flex items-center gap-1 bg-gradient-to-r from-primary/20 to-accent/20"
                     whileHover={{ scale: 1.1 }}
                   >
                     <Folder className="h-3 w-3" />
@@ -127,7 +141,7 @@ export default function ProjectsPage() {
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", delay: 0.2 }}
                   >
-                    <span className="px-2.5 sm:px-3 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-primary-foreground text-xs font-medium flex items-center gap-1 shadow-lg">
+                    <span className="px-2.5 sm:px-3 py-1 rounded-full bg-gradient-to-r from-amber to-orange text-white text-xs font-medium flex items-center gap-1 shadow-lg">
                       <Star className="h-3 w-3" />
                       Featured
                     </span>
@@ -204,21 +218,33 @@ export default function ProjectsPage() {
 
                 {/* Technologies */}
                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                  {project.technologies.slice(0, isLarge ? 7 : 4).map((tech, i) => (
-                    <motion.span 
-                      key={tech} 
-                      className="tag tag-primary text-xs"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.2 + i * 0.03 }}
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      {tech}
-                    </motion.span>
-                  ))}
+                  {project.technologies.slice(0, isLarge ? 7 : 4).map((tech, i) => {
+                    const techColors = [
+                      'from-primary/10 to-accent/10 text-primary',
+                      'from-cyan/10 to-emerald/10 text-cyan',
+                      'from-rose/10 to-orange/10 text-rose',
+                      'from-violet/10 to-accent/10 text-violet',
+                      'from-amber/10 to-orange/10 text-amber',
+                    ];
+                    return (
+                      <motion.span 
+                        key={tech} 
+                        className={cn(
+                          "px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r",
+                          techColors[i % techColors.length]
+                        )}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 + i * 0.03 }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        {tech}
+                      </motion.span>
+                    );
+                  })}
                   {project.technologies.length > (isLarge ? 7 : 4) && (
-                    <span className="tag text-xs text-muted-foreground">
+                    <span className="px-2.5 py-1 rounded-full text-xs text-muted-foreground glass">
                       +{project.technologies.length - (isLarge ? 7 : 4)} more
                     </span>
                   )}

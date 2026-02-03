@@ -37,13 +37,13 @@ export default function HomePage() {
   const topSkills = skillCategories.flatMap(cat => cat.skills).filter(s => s.proficiency === 'expert').slice(0, 6);
 
   const bentoItems = [
-    { title: "4+ Years", subtitle: "Frontend Experience", description: "Building scalable applications with React and TypeScript", icon: <Zap className="h-6 w-6" />, span: "lg:col-span-2" },
-    { title: "Design Systems", subtitle: "Component Libraries", description: "Creating reusable, accessible UI components", icon: <Sparkles className="h-6 w-6" /> },
-    { title: "90+", subtitle: "Lighthouse Score", description: "Optimized for speed & Core Web Vitals", icon: <Rocket className="h-6 w-6" /> },
-    { title: "50+ Projects", subtitle: "Delivered Worldwide", description: "From startups to enterprise solutions" },
-    { title: "100,000+", subtitle: "Users Served", description: "Scalable architectures at scale" },
-    { title: "∞ Coffee", subtitle: "Fuel for Code", description: "Powered by caffeine", icon: <Coffee className="h-6 w-6" /> },
-    { title: "Clean Code", subtitle: "Best Practices", description: "Writing maintainable, elegant solutions" },
+    { title: "4+ Years", subtitle: "Frontend Experience", description: "Building scalable applications with React and TypeScript", icon: <Zap className="h-6 w-6" />, span: "lg:col-span-2", variant: 'gradient' as const },
+    { title: "Design Systems", subtitle: "Component Libraries", description: "Creating reusable, accessible UI components", icon: <Sparkles className="h-6 w-6" />, variant: 'cyan' as const },
+    { title: "90+", subtitle: "Lighthouse Score", description: "Optimized for speed & Core Web Vitals", icon: <Rocket className="h-6 w-6" />, variant: 'emerald' as const },
+    { title: "50+ Projects", subtitle: "Delivered Worldwide", description: "From startups to enterprise solutions", variant: 'rose' as const },
+    { title: "100,000+", subtitle: "Users Served", description: "Scalable architectures at scale", variant: 'violet' as const },
+    { title: "∞ Coffee", subtitle: "Fuel for Code", description: "Powered by caffeine", icon: <Coffee className="h-6 w-6" />, variant: 'amber' as const },
+    { title: "Clean Code", subtitle: "Best Practices", description: "Writing maintainable, elegant solutions", variant: 'default' as const },
   ];
 
   return (
@@ -180,14 +180,18 @@ export default function HomePage() {
 
             {/* Highlight Stats */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
-              {hero.highlights.map((highlight, index) => (
-                <StatCard
-                  key={index}
-                  value={highlight.value}
-                  label={highlight.label}
-                  delay={0.6 + index * 0.15}
-                />
-              ))}
+              {hero.highlights.map((highlight, index) => {
+                const variants: Array<'primary' | 'cyan' | 'rose'> = ['primary', 'cyan', 'rose'];
+                return (
+                  <StatCard
+                    key={index}
+                    value={highlight.value}
+                    label={highlight.label}
+                    delay={0.6 + index * 0.15}
+                    variant={variants[index % variants.length]}
+                  />
+                );
+              })}
             </div>
           </motion.div>
         </motion.div>
@@ -225,7 +229,7 @@ export default function HomePage() {
               icon={item.icon}
               className={item.span}
               delay={index * 0.08}
-              variant={index === 0 ? 'gradient' : index === 2 ? 'glow' : 'default'}
+              variant={item.variant}
             />
           ))}
         </div>
