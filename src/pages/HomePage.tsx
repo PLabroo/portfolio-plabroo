@@ -478,8 +478,8 @@ export default function HomePage() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-6 mb-6">
-          <GitHubStats username="vaibhavkumarswe" />
-          <LeetCodeStats username="vaibhavkumarswe" />
+          <GitHubStats username="prateeklabroo" />
+          <LeetCodeStats username="prateeklabroo" />
         </div>
 
         {/* Achievements Section */}

@@ -55,9 +55,9 @@ export function DesktopSidebar() {
                 transition={{ duration: 0.2 }}
               >
                 <h1 className="font-display font-semibold text-foreground group-hover:text-primary transition-colors whitespace-nowrap">
-                  Vaibhav Kumar
+                  Prateek Labroo
                 </h1>
-                <p className="text-xs text-muted-foreground whitespace-nowrap">Senior Engineer</p>
+                <p className="text-xs text-muted-foreground whitespace-nowrap">Software Engineer</p>
               </motion.div>
             )}
           </AnimatePresence>

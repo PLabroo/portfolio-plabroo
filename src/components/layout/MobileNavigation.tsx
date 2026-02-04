@@ -102,8 +102,8 @@ export function MobileNavigation() {
                     VK
                   </div>
                   <div>
-                    <h2 className="font-display font-semibold">Vaibhav Kumar</h2>
-                    <p className="text-xs text-muted-foreground">Senior Engineer</p>
+                    <h2 className="font-display font-semibold">Prateek Labroo</h2>
+                    <p className="text-xs text-muted-foreground">Software Engineer</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
