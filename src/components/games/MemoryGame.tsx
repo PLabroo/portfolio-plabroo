@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 
@@ -22,7 +21,7 @@ export function MemoryGame() {
   const [matches, setMatches] = useState(0);
   const [isChecking, setIsChecking] = useState(false);
 
-  const initGame = () => {
+  const initGame = useCallback(() => {
     const selectedSymbols = CODE_SYMBOLS.slice(0, 8);
     const cardPairs = [...selectedSymbols, ...selectedSymbols]
       .sort(() => Math.random() - 0.5)
@@ -37,19 +36,22 @@ export function MemoryGame() {
     setMoves(0);
     setMatches(0);
     setIsChecking(false);
-  };
+  }, []);
 
   useEffect(() => {
     initGame();
-  }, []);
+  }, [initGame]);
 
   const handleCardClick = (cardId: number) => {
     if (isChecking) return;
     if (flippedCards.length === 2) return;
-    if (cards[cardId].isFlipped || cards[cardId].isMatched) return;
+    
+    const card = cards[cardId];
+    if (card.isFlipped || card.isMatched) return;
 
-    const newCards = [...cards];
-    newCards[cardId].isFlipped = true;
+    const newCards = cards.map((c, i) => 
+      i === cardId ? { ...c, isFlipped: true } : c
+    );
     setCards(newCards);
 
     const newFlipped = [...flippedCards, cardId];
@@ -60,27 +62,25 @@ export function MemoryGame() {
       setIsChecking(true);
 
       const [first, second] = newFlipped;
-      if (cards[first].symbol === cards[second].symbol) {
+      if (newCards[first].symbol === newCards[second].symbol) {
         // Match found
         setTimeout(() => {
-          const matchedCards = [...cards];
-          matchedCards[first].isMatched = true;
-          matchedCards[second].isMatched = true;
-          setCards(matchedCards);
+          setCards((prev) => prev.map((c, i) => 
+            i === first || i === second ? { ...c, isMatched: true } : c
+          ));
           setFlippedCards([]);
           setMatches((m) => m + 1);
           setIsChecking(false);
-        }, 500);
+        }, 400);
       } else {
         // No match
         setTimeout(() => {
-          const resetCards = [...cards];
-          resetCards[first].isFlipped = false;
-          resetCards[second].isFlipped = false;
-          setCards(resetCards);
+          setCards((prev) => prev.map((c, i) => 
+            i === first || i === second ? { ...c, isFlipped: false } : c
+          ));
           setFlippedCards([]);
           setIsChecking(false);
-        }, 1000);
+        }, 800);
       }
     }
   };
@@ -105,17 +105,21 @@ export function MemoryGame() {
 
       <div className="grid grid-cols-4 gap-2 sm:gap-3">
         {cards.map((card) => (
-          <motion.div
+          <div
             key={card.id}
             className="relative cursor-pointer"
             style={{ perspective: '1000px' }}
             onClick={() => handleCardClick(card.id)}
           >
-            <motion.div
-              className="relative w-16 h-20 sm:w-20 sm:h-24"
-              animate={{ rotateY: card.isFlipped || card.isMatched ? 180 : 0 }}
-              transition={{ duration: 0.4, type: 'spring', stiffness: 300 }}
-              style={{ transformStyle: 'preserve-3d' }}
+            <div
+              className={`relative w-14 h-18 sm:w-18 sm:h-22 transition-transform duration-300 ${
+                card.isFlipped || card.isMatched ? '[transform:rotateY(180deg)]' : ''
+              }`}
+              style={{ 
+                transformStyle: 'preserve-3d',
+                width: '3.5rem',
+                height: '4.5rem',
+              }}
             >
               {/* Front (hidden) */}
               <div
@@ -126,8 +130,8 @@ export function MemoryGame() {
               </div>
 
               {/* Back (shown when flipped) */}
-              <motion.div
-                className={`absolute inset-0 rounded-xl border flex items-center justify-center font-mono text-lg sm:text-xl font-bold ${
+              <div
+                className={`absolute inset-0 rounded-xl border flex items-center justify-center font-mono text-sm sm:text-base font-bold ${
                   card.isMatched
                     ? 'bg-emerald/20 border-emerald text-emerald'
                     : 'bg-card border-primary text-primary'
@@ -138,24 +142,19 @@ export function MemoryGame() {
                 }}
               >
                 {card.symbol}
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
 
-      <AnimatePresence>
-        {isWon && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center"
-          >
-            <p className="text-2xl font-bold text-success mb-1">🎉 You Won!</p>
-            <p className="text-muted-foreground">Completed in {moves} moves</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isWon && (
+        <div className="text-center animate-in fade-in slide-in-from-bottom-4">
+          <p className="text-2xl font-bold text-success mb-1">🎉 You Won!</p>
+          <p className="text-muted-foreground mb-4">Completed in {moves} moves</p>
+          <Button onClick={initGame} size="sm">Play Again</Button>
+        </div>
+      )}
 
       <p className="text-xs text-muted-foreground">Match pairs of code symbols</p>
     </div>

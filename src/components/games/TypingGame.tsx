@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play, RotateCcw } from 'lucide-react';
 
@@ -34,7 +33,8 @@ export function TypingGame() {
   }, []);
 
   const startGame = () => {
-    setCurrentSnippet(getRandomSnippet());
+    const snippet = getRandomSnippet();
+    setCurrentSnippet(snippet);
     setUserInput('');
     setIsPlaying(true);
     setStartTime(null);
@@ -42,7 +42,7 @@ export function TypingGame() {
     setAccuracy(100);
     setIsComplete(false);
     setSnippetsCompleted(0);
-    setTimeout(() => inputRef.current?.focus(), 100);
+    setTimeout(() => inputRef.current?.focus(), 50);
   };
 
   const resetGame = () => {
@@ -57,7 +57,7 @@ export function TypingGame() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isPlaying) return;
+    if (!isPlaying || isComplete) return;
     
     const value = e.target.value;
     
@@ -72,23 +72,25 @@ export function TypingGame() {
     for (let i = 0; i < value.length; i++) {
       if (value[i] === currentSnippet[i]) correct++;
     }
-    setAccuracy(value.length > 0 ? Math.round((correct / value.length) * 100) : 100);
+    const newAccuracy = value.length > 0 ? Math.round((correct / value.length) * 100) : 100;
+    setAccuracy(newAccuracy);
 
     // Calculate WPM
     if (startTime) {
-      const timeElapsed = (Date.now() - startTime) / 1000 / 60; // in minutes
-      const wordsTyped = value.length / 5; // standard: 5 chars = 1 word
-      setWpm(Math.round(wordsTyped / timeElapsed) || 0);
+      const timeElapsed = (Date.now() - startTime) / 1000 / 60;
+      const wordsTyped = value.length / 5;
+      setWpm(timeElapsed > 0 ? Math.round(wordsTyped / timeElapsed) : 0);
     }
 
     // Check completion
     if (value === currentSnippet) {
-      setSnippetsCompleted((s) => s + 1);
-      if (snippetsCompleted + 1 >= 3) {
+      const newCompleted = snippetsCompleted + 1;
+      setSnippetsCompleted(newCompleted);
+      
+      if (newCompleted >= 3) {
         setIsComplete(true);
         setIsPlaying(false);
       } else {
-        // Next snippet
         setCurrentSnippet(getRandomSnippet());
         setUserInput('');
       }
@@ -121,15 +123,15 @@ export function TypingGame() {
         </div>
       </div>
 
-      <div className="w-full p-4 rounded-xl bg-secondary/30 border border-border min-h-[100px]">
+      <div className="w-full p-4 rounded-xl bg-secondary/30 border border-border min-h-[80px]">
         {currentSnippet ? (
-          <div className="font-mono text-base sm:text-lg leading-relaxed">
+          <div className="font-mono text-base leading-relaxed break-all">
             {currentSnippet.split('').map((char, index) => {
               let colorClass = 'text-muted-foreground';
               if (index < userInput.length) {
                 colorClass = userInput[index] === char ? 'text-emerald' : 'text-destructive bg-destructive/20';
               } else if (index === userInput.length) {
-                colorClass = 'text-foreground bg-primary/20';
+                colorClass = 'text-foreground bg-primary/30 animate-pulse';
               }
               return (
                 <span key={index} className={colorClass}>
@@ -148,7 +150,7 @@ export function TypingGame() {
         type="text"
         value={userInput}
         onChange={handleInputChange}
-        disabled={!isPlaying}
+        disabled={!isPlaying || isComplete}
         className="w-full p-3 rounded-xl bg-card border border-border font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
         placeholder={isPlaying ? 'Start typing...' : 'Press Start to begin'}
         autoComplete="off"
@@ -158,16 +160,13 @@ export function TypingGame() {
       />
 
       {isComplete && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
+        <div className="text-center animate-in fade-in slide-in-from-bottom-4">
           <p className="text-2xl font-bold text-success mb-1">🎉 Complete!</p>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-4">
             Final WPM: {wpm} | Accuracy: {accuracy}%
           </p>
-        </motion.div>
+          <Button onClick={startGame} size="sm">Play Again</Button>
+        </div>
       )}
 
       <p className="text-xs text-muted-foreground">Type 3 code snippets as fast as you can!</p>
