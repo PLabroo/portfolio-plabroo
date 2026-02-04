@@ -299,9 +299,9 @@ export const portfolioData: PortfolioData = {
   },
 
   socialLinks: [
-    { platform: 'github', url: 'https://github.com/prateeklabroo', label: 'GitHub' },
-    { platform: 'linkedin', url: 'https://linkedin.com/in/prateeklabroo', label: 'LinkedIn' },
-    { platform: 'leetcode', url: 'https://leetcode.com/u/prateeklabroo', label: 'LeetCode' },
+    { platform: 'github', url: 'https://github.com/PLabroo', label: 'GitHub' },
+    { platform: 'linkedin', url: 'https://www.linkedin.com/in/prateek-labroo/', label: 'LinkedIn' },
+    { platform: 'leetcode', url: 'https://leetcode.com/u/PLabroo/', label: 'LeetCode' },
     { platform: 'email', url: 'mailto:prateeklabrooswe@gmail.com', label: 'Email' },
   ],
 

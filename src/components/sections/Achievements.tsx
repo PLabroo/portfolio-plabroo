@@ -35,7 +35,7 @@ const achievements: Achievement[] = [
     issuer: 'LeetCode',
     date: '2024',
     type: 'achievement',
-    url: 'https://leetcode.com/u/prateeklabroo',
+    url: 'https://leetcode.com/u/PLabroo/',
     skills: ['DSA', 'Problem Solving'],
   },
   {
