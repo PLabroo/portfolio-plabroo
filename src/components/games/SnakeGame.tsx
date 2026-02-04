@@ -1,23 +1,23 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, RotateCcw, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from 'lucide-react';
 
-const GRID_SIZE = 20;
-const CELL_SIZE = 20;
+const GRID_SIZE = 15;
+const CELL_SIZE = 22;
 const INITIAL_SPEED = 150;
 
 type Direction = 'UP' | 'DOWN' | 'LEFT' | 'RIGHT';
 type Position = { x: number; y: number };
 
 export function SnakeGame() {
-  const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
-  const [food, setFood] = useState<Position>({ x: 15, y: 15 });
+  const [snake, setSnake] = useState<Position[]>([{ x: 7, y: 7 }]);
+  const [food, setFood] = useState<Position>({ x: 10, y: 10 });
   const [direction, setDirection] = useState<Direction>('RIGHT');
   const [isPlaying, setIsPlaying] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-  const directionRef = useRef(direction);
+  const directionRef = useRef<Direction>('RIGHT');
+  const gameLoopRef = useRef<number | null>(null);
 
   const generateFood = useCallback((currentSnake: Position[]): Position => {
     let newFood: Position;
@@ -30,19 +30,21 @@ export function SnakeGame() {
     return newFood;
   }, []);
 
-  const resetGame = () => {
-    setSnake([{ x: 10, y: 10 }]);
-    setFood({ x: 15, y: 15 });
+  const resetGame = useCallback(() => {
+    if (gameLoopRef.current) {
+      clearInterval(gameLoopRef.current);
+      gameLoopRef.current = null;
+    }
+    setSnake([{ x: 7, y: 7 }]);
+    setFood({ x: 10, y: 10 });
     setDirection('RIGHT');
     directionRef.current = 'RIGHT';
     setIsPlaying(false);
     setGameOver(false);
     setScore(0);
-  };
+  }, []);
 
   const moveSnake = useCallback(() => {
-    if (!isPlaying || gameOver) return;
-
     setSnake((prevSnake) => {
       const head = { ...prevSnake[0] };
       const currentDirection = directionRef.current;
@@ -79,22 +81,26 @@ export function SnakeGame() {
       const newSnake = [head, ...prevSnake];
 
       // Check food collision
-      if (head.x === food.x && head.y === food.y) {
-        setScore((s) => s + 10);
-        setFood(generateFood(newSnake));
-      } else {
+      setFood((currentFood) => {
+        if (head.x === currentFood.x && head.y === currentFood.y) {
+          setScore((s) => s + 10);
+          return generateFood(newSnake);
+        }
         newSnake.pop();
-      }
+        return currentFood;
+      });
 
       return newSnake;
     });
-  }, [isPlaying, gameOver, food, generateFood]);
+  }, [generateFood]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (!isPlaying) return;
       
+      e.preventDefault();
       const currentDir = directionRef.current;
+      
       switch (e.key) {
         case 'ArrowUp':
           if (currentDir !== 'DOWN') {
@@ -128,11 +134,22 @@ export function SnakeGame() {
   }, [isPlaying]);
 
   useEffect(() => {
-    const gameLoop = setInterval(moveSnake, INITIAL_SPEED);
-    return () => clearInterval(gameLoop);
-  }, [moveSnake]);
+    if (isPlaying && !gameOver) {
+      gameLoopRef.current = window.setInterval(moveSnake, INITIAL_SPEED);
+    } else if (gameLoopRef.current) {
+      clearInterval(gameLoopRef.current);
+      gameLoopRef.current = null;
+    }
+    
+    return () => {
+      if (gameLoopRef.current) {
+        clearInterval(gameLoopRef.current);
+      }
+    };
+  }, [isPlaying, gameOver, moveSnake]);
 
   const handleDirectionClick = (newDir: Direction) => {
+    if (!isPlaying) return;
     const currentDir = directionRef.current;
     if (
       (newDir === 'UP' && currentDir !== 'DOWN') ||
@@ -142,6 +159,14 @@ export function SnakeGame() {
     ) {
       setDirection(newDir);
       directionRef.current = newDir;
+    }
+  };
+
+  const togglePlay = () => {
+    if (gameOver) {
+      resetGame();
+    } else {
+      setIsPlaying(!isPlaying);
     }
   };
 
@@ -155,8 +180,7 @@ export function SnakeGame() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsPlaying(!isPlaying)}
-            disabled={gameOver}
+            onClick={togglePlay}
           >
             {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
           </Button>
@@ -187,9 +211,9 @@ export function SnakeGame() {
 
         {/* Snake */}
         {snake.map((segment, index) => (
-          <motion.div
+          <div
             key={index}
-            className="absolute rounded-sm"
+            className="absolute rounded-sm transition-all duration-75"
             style={{
               width: CELL_SIZE - 2,
               height: CELL_SIZE - 2,
@@ -197,64 +221,61 @@ export function SnakeGame() {
               top: segment.y * CELL_SIZE + 1,
               background: index === 0 
                 ? 'hsl(var(--primary))' 
-                : `hsl(var(--primary) / ${1 - index * 0.05})`,
+                : `hsl(var(--primary) / ${Math.max(0.3, 1 - index * 0.1)})`,
             }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
           />
         ))}
 
         {/* Food */}
-        <motion.div
-          className="absolute rounded-full bg-accent"
+        <div
+          className="absolute rounded-full bg-accent animate-pulse"
           style={{
             width: CELL_SIZE - 4,
             height: CELL_SIZE - 4,
             left: food.x * CELL_SIZE + 2,
             top: food.y * CELL_SIZE + 2,
           }}
-          animate={{
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 0.5,
-            repeat: Infinity,
-          }}
         />
 
         {/* Game Over overlay */}
         {gameOver && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center"
-          >
+          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center">
             <p className="text-2xl font-bold text-destructive mb-2">Game Over!</p>
-            <p className="text-muted-foreground">Final Score: {score}</p>
-          </motion.div>
+            <p className="text-muted-foreground mb-4">Final Score: {score}</p>
+            <Button onClick={resetGame} size="sm">Play Again</Button>
+          </div>
+        )}
+
+        {/* Start overlay */}
+        {!isPlaying && !gameOver && (
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-sm flex flex-col items-center justify-center">
+            <p className="text-lg font-semibold mb-2">Snake Game</p>
+            <Button onClick={togglePlay} size="sm">
+              <Play className="h-4 w-4 mr-2" /> Start
+            </Button>
+          </div>
         )}
       </div>
 
       {/* Mobile controls */}
-      <div className="grid grid-cols-3 gap-2 md:hidden">
+      <div className="grid grid-cols-3 gap-2">
         <div />
-        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('UP')}>
+        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('UP')} disabled={!isPlaying}>
           <ArrowUp className="h-4 w-4" />
         </Button>
         <div />
-        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('LEFT')}>
+        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('LEFT')} disabled={!isPlaying}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('DOWN')}>
+        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('DOWN')} disabled={!isPlaying}>
           <ArrowDown className="h-4 w-4" />
         </Button>
-        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('RIGHT')}>
+        <Button variant="outline" size="icon" onClick={() => handleDirectionClick('RIGHT')} disabled={!isPlaying}>
           <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
 
-      <p className="text-xs text-muted-foreground">Use arrow keys to control the snake</p>
+      <p className="text-xs text-muted-foreground">Use arrow keys or buttons to control the snake</p>
     </div>
   );
 }

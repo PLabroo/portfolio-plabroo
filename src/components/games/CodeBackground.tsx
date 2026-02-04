@@ -1,17 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 
 const codeSymbols = [
-  '{', '}', '(', ')', '[', ']', '<', '>', '/', '\\',
-  ';', ':', '=', '+', '-', '*', '%', '&', '|', '!',
-  '?', '#', '@', '$', '^', '~', '`', '"', "'", ',',
-  'const', 'let', 'var', 'function', 'return', 'if',
-  'else', 'for', 'while', 'class', 'import', 'export',
-  '=>', '===', '!==', '&&', '||', '...', '++', '--',
-  'async', 'await', 'try', 'catch', 'null', 'true',
-  'false', 'undefined', 'this', 'new', 'typeof',
-  '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-  'React', 'useState', 'useEffect', 'props', 'state',
+  '{', '}', '(', ')', '[', ']', '<', '>',
+  ';', ':', '=', '+', '-', '*', '&', '|',
+  'const', 'let', 'function', 'return', 'if',
+  '=>', '===', '&&', '||', '...',
+  'async', 'await', 'null', 'true', 'false',
+  '0', '1', '2', '3', '4', '5',
+  'React', 'useState', 'props',
 ];
 
 interface FloatingSymbol {
@@ -20,124 +16,97 @@ interface FloatingSymbol {
   x: number;
   y: number;
   size: number;
-  duration: number;
-  delay: number;
   opacity: number;
+  animationDelay: string;
+  animationDuration: string;
 }
 
 export function CodeBackground() {
-  const symbols = useRef<FloatingSymbol[]>([]);
-
-  if (symbols.current.length === 0) {
-    symbols.current = Array.from({ length: 60 }, (_, i) => ({
+  // Generate symbols only once with useMemo
+  const symbols = useMemo<FloatingSymbol[]>(() => 
+    Array.from({ length: 30 }, (_, i) => ({
       id: i,
       symbol: codeSymbols[Math.floor(Math.random() * codeSymbols.length)],
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 16 + 10,
-      duration: Math.random() * 20 + 15,
-      delay: Math.random() * -20,
-      opacity: Math.random() * 0.3 + 0.1,
-    }));
-  }
+      size: Math.random() * 12 + 10,
+      opacity: Math.random() * 0.15 + 0.05,
+      animationDelay: `${Math.random() * -10}s`,
+      animationDuration: `${Math.random() * 10 + 15}s`,
+    }))
+  , []);
+
+  // Generate stars only once
+  const stars = useMemo(() => 
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 3}s`,
+      animationDuration: `${Math.random() * 2 + 2}s`,
+    }))
+  , []);
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
       {/* Deep space gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/20" />
       
-      {/* Starfield effect */}
+      {/* Starfield effect - CSS animation only */}
       <div className="absolute inset-0">
-        {Array.from({ length: 100 }).map((_, i) => (
-          <motion.div
-            key={`star-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-primary/30"
+        {stars.map((star) => (
+          <div
+            key={`star-${star.id}`}
+            className="absolute w-1 h-1 rounded-full bg-primary/30 animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{
-              duration: Math.random() * 3 + 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
+              left: star.left,
+              top: star.top,
+              animationDelay: star.animationDelay,
+              animationDuration: star.animationDuration,
             }}
           />
         ))}
       </div>
 
-      {/* Floating code symbols */}
-      {symbols.current.map((symbol) => (
-        <motion.div
+      {/* Floating code symbols - CSS animation only */}
+      {symbols.map((symbol) => (
+        <div
           key={symbol.id}
-          className="absolute font-mono text-primary/20 select-none"
+          className="absolute font-mono text-primary/20 select-none animate-float"
           style={{
             left: `${symbol.x}%`,
             top: `${symbol.y}%`,
             fontSize: `${symbol.size}px`,
             opacity: symbol.opacity,
-          }}
-          animate={{
-            y: [0, -30, 0],
-            x: [0, Math.random() * 20 - 10, 0],
-            rotate: [0, Math.random() * 20 - 10, 0],
-            opacity: [symbol.opacity, symbol.opacity * 1.5, symbol.opacity],
-          }}
-          transition={{
-            duration: symbol.duration,
-            repeat: Infinity,
-            delay: symbol.delay,
-            ease: 'easeInOut',
+            animationDelay: symbol.animationDelay,
+            animationDuration: symbol.animationDuration,
           }}
         >
           {symbol.symbol}
-        </motion.div>
+        </div>
       ))}
 
-      {/* Gradient orbs */}
-      <motion.div
-        className="absolute w-96 h-96 rounded-full blur-3xl"
+      {/* Static gradient orbs */}
+      <div
+        className="absolute w-80 h-80 rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, hsl(var(--primary) / 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)',
           left: '10%',
           top: '20%',
         }}
-        animate={{
-          x: [0, 50, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
       />
-      <motion.div
-        className="absolute w-80 h-80 rounded-full blur-3xl"
+      <div
+        className="absolute w-64 h-64 rounded-full blur-3xl"
         style={{
-          background: 'radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, hsl(var(--accent) / 0.08) 0%, transparent 70%)',
           right: '10%',
           bottom: '20%',
-        }}
-        animate={{
-          x: [0, -40, 0],
-          y: [0, -40, 0],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: 'easeInOut',
         }}
       />
 
       {/* Grid overlay */}
       <div 
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `
             linear-gradient(to right, hsl(var(--primary)) 1px, transparent 1px),

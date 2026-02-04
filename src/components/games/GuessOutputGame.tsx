@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, ChevronRight, Check, X } from 'lucide-react';
 
@@ -42,7 +41,8 @@ const QUESTIONS: Question[] = [
     explanation: '+"a" tries to convert "a" to number, resulting in NaN.',
   },
   {
-    code: `const a = [1]; const b = [1];\nconsole.log(a == b);`,
+    code: `const a = [1]; const b = [1];
+console.log(a == b);`,
     options: ['true', 'false', 'undefined', 'TypeError'],
     correct: 1,
     explanation: 'Arrays are compared by reference, not value. Different arrays are not equal.',
@@ -60,7 +60,9 @@ const QUESTIONS: Question[] = [
     explanation: 'Both are non-empty strings, so !! converts both to true.',
   },
   {
-    code: `let x = 1;\nlet y = x++;\nconsole.log(y);`,
+    code: `let x = 1;
+let y = x++;
+console.log(y);`,
     options: ['1', '2', 'undefined', 'NaN'],
     correct: 0,
     explanation: 'Post-increment returns the value before incrementing.',
@@ -81,7 +83,7 @@ export function GuessOutputGame() {
   const [showResult, setShowResult] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
 
-  const shuffleQuestions = () => {
+  const shuffleQuestions = useCallback(() => {
     const shuffled = [...QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 5);
     setQuestions(shuffled);
     setCurrentIndex(0);
@@ -89,14 +91,14 @@ export function GuessOutputGame() {
     setScore(0);
     setShowResult(false);
     setIsComplete(false);
-  };
+  }, []);
 
   useEffect(() => {
     shuffleQuestions();
-  }, []);
+  }, [shuffleQuestions]);
 
   const handleAnswer = (index: number) => {
-    if (selectedAnswer !== null) return;
+    if (selectedAnswer !== null || !questions[currentIndex]) return;
     setSelectedAnswer(index);
     setShowResult(true);
     if (index === questions[currentIndex].correct) {
@@ -116,9 +118,9 @@ export function GuessOutputGame() {
 
   const currentQuestion = questions[currentIndex];
 
-  if (!currentQuestion) {
+  if (!currentQuestion && !isComplete) {
     return (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center py-8">
         <Button onClick={shuffleQuestions}>Start Game</Button>
       </div>
     );
@@ -140,99 +142,79 @@ export function GuessOutputGame() {
         </Button>
       </div>
 
-      <AnimatePresence mode="wait">
-        {!isComplete ? (
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="w-full"
-          >
-            {/* Code block */}
-            <div className="w-full p-4 rounded-xl bg-secondary/50 border border-border mb-4 overflow-x-auto">
-              <pre className="font-mono text-sm sm:text-base text-foreground whitespace-pre-wrap">
-                {currentQuestion.code}
-              </pre>
-            </div>
+      {!isComplete ? (
+        <div className="w-full animate-in fade-in slide-in-from-right-4">
+          {/* Code block */}
+          <div className="w-full p-4 rounded-xl bg-secondary/50 border border-border mb-4 overflow-x-auto">
+            <pre className="font-mono text-sm text-foreground whitespace-pre-wrap">
+              {currentQuestion.code}
+            </pre>
+          </div>
 
-            {/* Options */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {currentQuestion.options.map((option, index) => {
-                const isSelected = selectedAnswer === index;
-                const isCorrect = index === currentQuestion.correct;
-                let bgClass = 'bg-card hover:bg-secondary';
-                
-                if (showResult) {
-                  if (isCorrect) bgClass = 'bg-emerald/20 border-emerald';
-                  else if (isSelected && !isCorrect) bgClass = 'bg-destructive/20 border-destructive';
-                }
+          {/* Options */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {currentQuestion.options.map((option, index) => {
+              const isSelected = selectedAnswer === index;
+              const isCorrect = index === currentQuestion.correct;
+              let bgClass = 'bg-card hover:bg-secondary border-border';
+              
+              if (showResult) {
+                if (isCorrect) bgClass = 'bg-emerald/20 border-emerald';
+                else if (isSelected && !isCorrect) bgClass = 'bg-destructive/20 border-destructive';
+              }
 
-                return (
-                  <motion.button
-                    key={index}
-                    onClick={() => handleAnswer(index)}
-                    disabled={selectedAnswer !== null}
-                    className={`p-3 rounded-xl border text-left font-mono text-sm transition-all ${bgClass} disabled:cursor-not-allowed`}
-                    whileHover={selectedAnswer === null ? { scale: 1.02 } : {}}
-                    whileTap={selectedAnswer === null ? { scale: 0.98 } : {}}
-                  >
-                    <span className="flex items-center gap-2">
-                      {showResult && isCorrect && <Check className="h-4 w-4 text-emerald" />}
-                      {showResult && isSelected && !isCorrect && <X className="h-4 w-4 text-destructive" />}
-                      {option}
-                    </span>
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* Explanation */}
-            <AnimatePresence>
-              {showResult && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="w-full p-3 rounded-xl bg-muted/50 border border-border mb-4"
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleAnswer(index)}
+                  disabled={selectedAnswer !== null}
+                  className={`p-3 rounded-xl border text-left font-mono text-sm transition-all ${bgClass} disabled:cursor-not-allowed hover:scale-[1.02] active:scale-[0.98]`}
                 >
-                  <p className="text-sm text-muted-foreground">
-                    <span className="font-semibold text-foreground">Explanation: </span>
-                    {currentQuestion.explanation}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  <span className="flex items-center gap-2">
+                    {showResult && isCorrect && <Check className="h-4 w-4 text-emerald flex-shrink-0" />}
+                    {showResult && isSelected && !isCorrect && <X className="h-4 w-4 text-destructive flex-shrink-0" />}
+                    {option}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-            {showResult && (
-              <Button onClick={nextQuestion} className="w-full">
-                {currentIndex + 1 >= questions.length ? 'See Results' : 'Next Question'}
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            )}
-          </motion.div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-8"
-          >
-            <p className="text-4xl mb-2">
-              {score === questions.length ? '🏆' : score >= 3 ? '🎉' : '💪'}
-            </p>
-            <p className="text-2xl font-bold mb-2">
-              {score === questions.length
-                ? 'Perfect Score!'
-                : score >= 3
-                ? 'Great Job!'
-                : 'Keep Learning!'}
-            </p>
-            <p className="text-muted-foreground mb-4">
-              You got {score} out of {questions.length} correct
-            </p>
-            <Button onClick={shuffleQuestions}>Play Again</Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {/* Explanation */}
+          {showResult && (
+            <div className="w-full p-3 rounded-xl bg-muted/50 border border-border mb-4 animate-in fade-in slide-in-from-bottom-2">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">Explanation: </span>
+                {currentQuestion.explanation}
+              </p>
+            </div>
+          )}
+
+          {showResult && (
+            <Button onClick={nextQuestion} className="w-full">
+              {currentIndex + 1 >= questions.length ? 'See Results' : 'Next Question'}
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          )}
+        </div>
+      ) : (
+        <div className="text-center py-8 animate-in fade-in zoom-in">
+          <p className="text-4xl mb-2">
+            {score === questions.length ? '🏆' : score >= 3 ? '🎉' : '💪'}
+          </p>
+          <p className="text-2xl font-bold mb-2">
+            {score === questions.length
+              ? 'Perfect Score!'
+              : score >= 3
+              ? 'Great Job!'
+              : 'Keep Learning!'}
+          </p>
+          <p className="text-muted-foreground mb-4">
+            You got {score} out of {questions.length} correct
+          </p>
+          <Button onClick={shuffleQuestions}>Play Again</Button>
+        </div>
+      )}
 
       <p className="text-xs text-muted-foreground">Guess what the JavaScript code outputs</p>
     </div>

@@ -677,3 +677,25 @@
     background-position: 0% 50%;
   }
 }
+
+/* Floating animation for code symbols */
+@keyframes symbol-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: var(--symbol-opacity, 0.1);
+  }
+  25% {
+    transform: translateY(-15px) translateX(5px) rotate(3deg);
+  }
+  50% {
+    transform: translateY(-25px) translateX(0) rotate(-2deg);
+    opacity: calc(var(--symbol-opacity, 0.1) * 1.5);
+  }
+  75% {
+    transform: translateY(-10px) translateX(-5px) rotate(2deg);
+  }
+}
+
+.animate-float {
+  animation: symbol-float ease-in-out infinite;
+}
