@@ -1,0 +1,176 @@
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Play, RotateCcw } from 'lucide-react';
+
+const CODE_SNIPPETS = [
+  'const sum = (a, b) => a + b;',
+  'function hello() { return "world"; }',
+  'const arr = [1, 2, 3].map(x => x * 2);',
+  'if (isValid) { process(); }',
+  'const { name, age } = user;',
+  'async function fetch() { await api(); }',
+  'export default App;',
+  'import React from "react";',
+  'useState(() => initialState);',
+  'arr.filter(x => x > 0).length;',
+  'const obj = { ...prev, new: val };',
+  'try { parse(json); } catch (e) {}',
+];
+
+export function TypingGame() {
+  const [currentSnippet, setCurrentSnippet] = useState('');
+  const [userInput, setUserInput] = useState('');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
+  const [wpm, setWpm] = useState(0);
+  const [accuracy, setAccuracy] = useState(100);
+  const [isComplete, setIsComplete] = useState(false);
+  const [snippetsCompleted, setSnippetsCompleted] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const getRandomSnippet = useCallback(() => {
+    return CODE_SNIPPETS[Math.floor(Math.random() * CODE_SNIPPETS.length)];
+  }, []);
+
+  const startGame = () => {
+    setCurrentSnippet(getRandomSnippet());
+    setUserInput('');
+    setIsPlaying(true);
+    setStartTime(null);
+    setWpm(0);
+    setAccuracy(100);
+    setIsComplete(false);
+    setSnippetsCompleted(0);
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  const resetGame = () => {
+    setCurrentSnippet('');
+    setUserInput('');
+    setIsPlaying(false);
+    setStartTime(null);
+    setWpm(0);
+    setAccuracy(100);
+    setIsComplete(false);
+    setSnippetsCompleted(0);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isPlaying) return;
+    
+    const value = e.target.value;
+    
+    if (!startTime && value.length === 1) {
+      setStartTime(Date.now());
+    }
+
+    setUserInput(value);
+
+    // Calculate accuracy
+    let correct = 0;
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] === currentSnippet[i]) correct++;
+    }
+    setAccuracy(value.length > 0 ? Math.round((correct / value.length) * 100) : 100);
+
+    // Calculate WPM
+    if (startTime) {
+      const timeElapsed = (Date.now() - startTime) / 1000 / 60; // in minutes
+      const wordsTyped = value.length / 5; // standard: 5 chars = 1 word
+      setWpm(Math.round(wordsTyped / timeElapsed) || 0);
+    }
+
+    // Check completion
+    if (value === currentSnippet) {
+      setSnippetsCompleted((s) => s + 1);
+      if (snippetsCompleted + 1 >= 3) {
+        setIsComplete(true);
+        setIsPlaying(false);
+      } else {
+        // Next snippet
+        setCurrentSnippet(getRandomSnippet());
+        setUserInput('');
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4 w-full max-w-lg">
+      <div className="flex items-center justify-between w-full">
+        <div className="flex gap-4">
+          <div className="text-sm font-mono">
+            WPM: <span className="text-primary font-bold">{wpm}</span>
+          </div>
+          <div className="text-sm font-mono">
+            Accuracy: <span className={`font-bold ${accuracy >= 90 ? 'text-emerald' : accuracy >= 70 ? 'text-amber' : 'text-destructive'}`}>{accuracy}%</span>
+          </div>
+          <div className="text-sm font-mono">
+            Progress: <span className="text-violet font-bold">{snippetsCompleted}/3</span>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {!isPlaying && !isComplete && (
+            <Button variant="outline" size="sm" onClick={startGame}>
+              <Play className="h-4 w-4 mr-1" /> Start
+            </Button>
+          )}
+          <Button variant="outline" size="sm" onClick={resetGame}>
+            <RotateCcw className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="w-full p-4 rounded-xl bg-secondary/30 border border-border min-h-[100px]">
+        {currentSnippet ? (
+          <div className="font-mono text-base sm:text-lg leading-relaxed">
+            {currentSnippet.split('').map((char, index) => {
+              let colorClass = 'text-muted-foreground';
+              if (index < userInput.length) {
+                colorClass = userInput[index] === char ? 'text-emerald' : 'text-destructive bg-destructive/20';
+              } else if (index === userInput.length) {
+                colorClass = 'text-foreground bg-primary/20';
+              }
+              return (
+                <span key={index} className={colorClass}>
+                  {char}
+                </span>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-center">Press Start to begin typing!</p>
+        )}
+      </div>
+
+      <input
+        ref={inputRef}
+        type="text"
+        value={userInput}
+        onChange={handleInputChange}
+        disabled={!isPlaying}
+        className="w-full p-3 rounded-xl bg-card border border-border font-mono text-foreground focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+        placeholder={isPlaying ? 'Start typing...' : 'Press Start to begin'}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+      />
+
+      {isComplete && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <p className="text-2xl font-bold text-success mb-1">🎉 Complete!</p>
+          <p className="text-muted-foreground">
+            Final WPM: {wpm} | Accuracy: {accuracy}%
+          </p>
+        </motion.div>
+      )}
+
+      <p className="text-xs text-muted-foreground">Type 3 code snippets as fast as you can!</p>
+    </div>
+  );
+}
