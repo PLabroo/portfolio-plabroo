@@ -13,8 +13,8 @@ export function MainLayout() {
       {/* Desktop Sidebar */}
       <DesktopSidebar />
 
-      {/* Main Content */}
-      <main className="lg:ml-64 min-h-screen pb-24 lg:pb-0">
+      {/* Main Content - uses CSS transition for smooth sidebar collapse */}
+      <main className="lg:ml-[72px] xl:ml-64 min-h-screen pb-24 lg:pb-0 transition-[margin] duration-300">
         <PageTransition>
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
             <Outlet />
