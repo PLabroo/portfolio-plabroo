@@ -28,7 +28,7 @@ export function MobileNavigation() {
   return (
     <>
       {/* Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 glass-strong border-t border-border/50 pb-safe">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 glass-strong border-t border-border/50">
         <div className="flex items-center justify-around px-2 py-2">
           {mainNavItems.map((item) => {
             const Icon = getIcon(item.icon);
@@ -99,7 +99,7 @@ export function MobileNavigation() {
               <div className="flex items-center justify-between px-6 pb-4 border-b border-border/50">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold">
-                    VK
+                    PL
                   </div>
                   <div>
                     <h2 className="font-display font-semibold">Prateek Labroo</h2>

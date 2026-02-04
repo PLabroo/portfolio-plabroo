@@ -1,31 +1,81 @@
-import { motion } from 'framer-motion';
-import { MapPin, Download, Coffee, Code, Bug, BookOpen, Mail, Github, Linkedin, User, Sparkles, Zap, Heart, Target } from 'lucide-react';
-import { portfolioData } from '@/data/portfolio';
-import { staggerContainer, staggerItem } from '@/components/layout/PageTransition';
-import { Button } from '@/components/ui/button';
+import { motion } from "framer-motion";
+import {
+  MapPin,
+  Download,
+  Coffee,
+  Code,
+  Bug,
+  BookOpen,
+  Mail,
+  Github,
+  Linkedin,
+  User,
+  Sparkles,
+  Zap,
+  Heart,
+  Target,
+} from "lucide-react";
+import { portfolioData } from "@/data/portfolio";
+import {
+  staggerContainer,
+  staggerItem,
+} from "@/components/layout/PageTransition";
+import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
   const { about } = portfolioData;
 
   const iconMap: Record<string, typeof Coffee> = {
-    '☕': Coffee,
-    '💻': Code,
-    '🎯': Bug,
-    '📚': BookOpen,
+    "☕": Coffee,
+    "💻": Code,
+    "🎯": Bug,
+    "📚": BookOpen,
   };
 
   const focusColors = [
-    { bg: 'from-primary/10 to-accent/5', icon: 'bg-primary/10 text-primary', border: 'border-primary/20' },
-    { bg: 'from-cyan/10 to-emerald/5', icon: 'bg-cyan/10 text-cyan', border: 'border-cyan/20' },
-    { bg: 'from-rose/10 to-orange/5', icon: 'bg-rose/10 text-rose', border: 'border-rose/20' },
-    { bg: 'from-violet/10 to-accent/5', icon: 'bg-violet/10 text-violet', border: 'border-violet/20' },
+    {
+      bg: "from-primary/10 to-accent/5",
+      icon: "bg-primary/10 text-primary",
+      border: "border-primary/20",
+    },
+    {
+      bg: "from-cyan/10 to-emerald/5",
+      icon: "bg-cyan/10 text-cyan",
+      border: "border-cyan/20",
+    },
+    {
+      bg: "from-rose/10 to-orange/5",
+      icon: "bg-rose/10 text-rose",
+      border: "border-rose/20",
+    },
+    {
+      bg: "from-violet/10 to-accent/5",
+      icon: "bg-violet/10 text-violet",
+      border: "border-violet/20",
+    },
   ];
 
   const factColors = [
-    { bg: 'from-primary/10 to-cyan/10', icon: 'bg-primary/10', text: 'from-primary to-cyan' },
-    { bg: 'from-emerald/10 to-cyan/10', icon: 'bg-emerald/10', text: 'from-emerald to-cyan' },
-    { bg: 'from-rose/10 to-orange/10', icon: 'bg-rose/10', text: 'from-rose to-orange' },
-    { bg: 'from-violet/10 to-accent/10', icon: 'bg-violet/10', text: 'from-violet to-accent' },
+    {
+      bg: "from-primary/10 to-cyan/10",
+      icon: "bg-primary/10",
+      text: "from-primary to-cyan",
+    },
+    {
+      bg: "from-emerald/10 to-cyan/10",
+      icon: "bg-emerald/10",
+      text: "from-emerald to-cyan",
+    },
+    {
+      bg: "from-rose/10 to-orange/10",
+      icon: "bg-rose/10",
+      text: "from-rose to-orange",
+    },
+    {
+      bg: "from-violet/10 to-accent/10",
+      icon: "bg-violet/10",
+      text: "from-violet to-accent",
+    },
   ];
 
   return (
@@ -39,10 +89,7 @@ export default function AboutPage() {
       >
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           {/* Profile Photo */}
-          <motion.div 
-            variants={staggerItem}
-            className="relative"
-          >
+          <motion.div variants={staggerItem} className="relative">
             <motion.div
               className="w-40 h-40 sm:w-52 sm:h-52 lg:w-64 lg:h-64 rounded-3xl glass-card overflow-hidden relative group"
               whileHover={{ scale: 1.02 }}
@@ -50,11 +97,17 @@ export default function AboutPage() {
             >
               {/* Placeholder with gradient mesh */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-cyan/15 to-accent/20 flex items-center justify-center">
-                <User className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 text-primary/40" />
+                {/* use this below image path public\images\prateek_labroo.jpeg */}
+                <img
+                  src="/images/prateek_labroo.jpeg"
+                  alt="Prateek Labroo"
+                  className="w-full h-full object-cover"
+                />
+                {/* <User className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 text-primary/40" /> */}
               </div>
-              
+
               {/* Animated gradient ring */}
-              <motion.div 
+              {/* <motion.div 
                 className="absolute inset-0 rounded-3xl"
                 style={{
                   background: 'linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--cyan) / 0.2), hsl(var(--accent) / 0.3))',
@@ -62,7 +115,7 @@ export default function AboutPage() {
                 }}
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              />
+              /> */}
             </motion.div>
 
             {/* Floating badges */}
@@ -76,7 +129,7 @@ export default function AboutPage() {
                 Available for hire
               </span>
             </motion.div>
-            
+
             <motion.div
               className="absolute -top-3 -left-3 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg"
               animate={{ rotate: [0, 360] }}
@@ -97,23 +150,23 @@ export default function AboutPage() {
 
           {/* Header Content */}
           <div className="text-center lg:text-left flex-1">
-            <motion.span 
+            <motion.span
               variants={staggerItem}
               className="inline-block px-4 py-1.5 rounded-full glass-card text-sm font-medium bg-gradient-to-r from-primary/10 to-accent/10 text-primary mb-4"
             >
               About Me
             </motion.span>
-            <motion.h1 
+            <motion.h1
               variants={staggerItem}
               className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-3"
             >
-              {about.title.split(' ').map((word, i) => (
+              {about.title.split(" ").map((word, i) => (
                 <span key={i} className={i === 1 ? "gradient-text" : ""}>
-                  {word}{' '}
+                  {word}{" "}
                 </span>
               ))}
             </motion.h1>
-            <motion.p 
+            <motion.p
               variants={staggerItem}
               className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-xl"
             >
@@ -121,29 +174,62 @@ export default function AboutPage() {
             </motion.p>
 
             {/* Quick Actions */}
-            <motion.div 
+            <motion.div
               variants={staggerItem}
               className="flex flex-wrap justify-center lg:justify-start gap-3 mt-6"
             >
-              <Button asChild size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+              <Button
+                asChild
+                size="sm"
+                className="gap-2 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+              >
                 <a href={about.resumeUrl} download>
                   <Download className="h-4 w-4" />
                   Resume
                 </a>
               </Button>
-              <Button asChild variant="outline" size="sm" className="gap-2 glass border-cyan/30 hover:bg-cyan/10 hover:text-cyan">
+              <Button
+                asChild
+                variant="outline"
+                size="sm"
+                className="gap-2 glass border-cyan/30 hover:bg-cyan/10 hover:text-cyan"
+              >
                 <a href={`mailto:${portfolioData.contact.email}`}>
                   <Mail className="h-4 w-4" />
                   Email
                 </a>
               </Button>
-              <Button asChild variant="ghost" size="sm" className="gap-2 hover:bg-primary/10 hover:text-primary">
-                <a href={portfolioData.socialLinks.find(l => l.platform === 'github')?.url} target="_blank">
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="gap-2 hover:bg-primary/10 hover:text-primary"
+              >
+                <a
+                  href={
+                    portfolioData.socialLinks.find(
+                      (l) => l.platform === "github",
+                    )?.url
+                  }
+                  target="_blank"
+                >
                   <Github className="h-4 w-4" />
                 </a>
               </Button>
-              <Button asChild variant="ghost" size="sm" className="gap-2 hover:bg-cyan/10 hover:text-cyan">
-                <a href={portfolioData.socialLinks.find(l => l.platform === 'linkedin')?.url} target="_blank">
+              <Button
+                asChild
+                variant="ghost"
+                size="sm"
+                className="gap-2 hover:bg-cyan/10 hover:text-cyan"
+              >
+                <a
+                  href={
+                    portfolioData.socialLinks.find(
+                      (l) => l.platform === "linkedin",
+                    )?.url
+                  }
+                  target="_blank"
+                >
                   <Linkedin className="h-4 w-4" />
                 </a>
               </Button>
@@ -163,11 +249,11 @@ export default function AboutPage() {
         {/* Decorative gradient */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 via-cyan/5 to-transparent rounded-bl-full" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-accent/10 via-rose/5 to-transparent rounded-tr-full" />
-        
+
         <div className="relative space-y-4">
           {about.bio.map((paragraph, index) => (
-            <motion.p 
-              key={index} 
+            <motion.p
+              key={index}
               className="text-sm sm:text-base text-foreground/90 leading-relaxed"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -216,7 +302,7 @@ export default function AboutPage() {
                 whileHover={{ scale: 1.02, x: 5 }}
                 className={`flex items-center gap-3 glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4 bg-gradient-to-r ${color.bg} border ${color.border}`}
               >
-                <motion.div 
+                <motion.div
                   className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 ${color.icon}`}
                   whileHover={{ rotate: 10 }}
                 >
@@ -252,17 +338,21 @@ export default function AboutPage() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 className={`glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center relative overflow-hidden bg-gradient-to-br ${color.bg}`}
               >
-                <motion.div 
+                <motion.div
                   className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-3 ${color.icon}`}
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
                 >
                   <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </motion.div>
-                <div className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${color.text} bg-clip-text text-transparent mb-0.5 sm:mb-1`}>
+                <div
+                  className={`text-xl sm:text-2xl font-bold bg-gradient-to-r ${color.text} bg-clip-text text-transparent mb-0.5 sm:mb-1`}
+                >
                   {fact.value}
                 </div>
-                <div className="text-xs sm:text-sm text-muted-foreground">{fact.label}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">
+                  {fact.label}
+                </div>
               </motion.div>
             );
           })}

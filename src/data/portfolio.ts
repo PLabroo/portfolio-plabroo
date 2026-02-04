@@ -5,7 +5,7 @@ export const portfolioData: PortfolioData = {
     title: 'Prateek Labroo | Software Engineer',
     description: 'Software Engineer specializing in creating performant, accessible, and scalable web applications with React, TypeScript, and modern frontend technologies.',
     siteUrl: 'https://prateeklabroo.dev',
-    ogImage: '/og-image.png',
+    ogImage: '/images/prateek_labroo.jpeg',
     twitterHandle: '@prateeklabroo',
     keywords: [
       'Software Engineer',

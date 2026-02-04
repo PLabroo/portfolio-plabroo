@@ -1,38 +1,57 @@
-import { motion } from 'framer-motion';
-import { portfolioData } from '@/data/portfolio';
-import { staggerContainer, staggerItem } from '@/components/layout/PageTransition';
-import { cn } from '@/lib/utils';
-import { Sparkles, Zap, Code2 } from 'lucide-react';
+import { motion } from "framer-motion";
+import { portfolioData } from "@/data/portfolio";
+import {
+  staggerContainer,
+  staggerItem,
+} from "@/components/layout/PageTransition";
+import { cn } from "@/lib/utils";
+import { Sparkles, Zap, Code2 } from "lucide-react";
 
 export default function SkillsPage() {
   const { skillCategories } = portfolioData;
 
   const proficiencyConfig = {
-    expert: { 
-      color: 'bg-emerald', 
-      bg: 'from-emerald/15 to-cyan/10',
-      text: 'text-emerald',
-      border: 'border-emerald/20'
+    expert: {
+      color: "bg-emerald",
+      bg: "from-emerald/15 to-cyan/10",
+      text: "text-emerald",
+      border: "border-emerald/20",
     },
-    advanced: { 
-      color: 'bg-primary', 
-      bg: 'from-primary/15 to-accent/10',
-      text: 'text-primary',
-      border: 'border-primary/20'
+    advanced: {
+      color: "bg-primary",
+      bg: "from-primary/15 to-accent/10",
+      text: "text-primary",
+      border: "border-primary/20",
     },
-    intermediate: { 
-      color: 'bg-amber', 
-      bg: 'from-amber/15 to-orange/10',
-      text: 'text-amber',
-      border: 'border-amber/20'
+    intermediate: {
+      color: "bg-amber",
+      bg: "from-amber/15 to-orange/10",
+      text: "text-amber",
+      border: "border-amber/20",
     },
   };
 
   const categoryColors = [
-    { gradient: 'from-primary/10 to-accent/5', icon: 'from-primary to-accent', iconBg: 'bg-primary/10' },
-    { gradient: 'from-cyan/10 to-emerald/5', icon: 'from-cyan to-emerald', iconBg: 'bg-cyan/10' },
-    { gradient: 'from-rose/10 to-orange/5', icon: 'from-rose to-orange', iconBg: 'bg-rose/10' },
-    { gradient: 'from-violet/10 to-accent/5', icon: 'from-violet to-accent', iconBg: 'bg-violet/10' },
+    {
+      gradient: "from-primary/10 to-accent/5",
+      icon: "from-primary to-accent",
+      iconBg: "bg-primary/10",
+    },
+    {
+      gradient: "from-cyan/10 to-emerald/5",
+      icon: "from-cyan to-emerald",
+      iconBg: "bg-cyan/10",
+    },
+    {
+      gradient: "from-rose/10 to-orange/5",
+      icon: "from-rose to-orange",
+      iconBg: "bg-rose/10",
+    },
+    {
+      gradient: "from-violet/10 to-accent/5",
+      icon: "from-violet to-accent",
+      iconBg: "bg-violet/10",
+    },
   ];
 
   return (
@@ -44,24 +63,25 @@ export default function SkillsPage() {
         animate="show"
         className="text-center"
       >
-        <motion.span 
+        <motion.span
           variants={staggerItem}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-sm font-medium bg-gradient-to-r from-primary/10 to-accent/10 text-primary mb-4 sm:mb-6"
         >
           <Zap className="w-4 h-4" />
           Technical Arsenal
         </motion.span>
-        <motion.h1 
+        <motion.h1
           variants={staggerItem}
           className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-3 sm:mb-4"
         >
           Skills & <span className="gradient-text">Expertise</span>
         </motion.h1>
-        <motion.p 
+        <motion.p
           variants={staggerItem}
           className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4"
         >
-          A comprehensive toolkit honed through years of building production applications
+          A comprehensive toolkit honed through years of building production
+          applications
         </motion.p>
       </motion.section>
 
@@ -73,11 +93,19 @@ export default function SkillsPage() {
         className="flex flex-wrap justify-center gap-4 sm:gap-6"
       >
         {Object.entries(proficiencyConfig).map(([level, config]) => (
-          <div key={level} className={cn(
-            "flex items-center gap-2 text-xs sm:text-sm px-3 py-1.5 rounded-full glass",
-            config.border
-          )}>
-            <span className={cn("w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full", config.color)} />
+          <div
+            key={level}
+            className={cn(
+              "flex items-center gap-2 text-xs sm:text-sm px-3 py-1.5 rounded-full glass",
+              config.border,
+            )}
+          >
+            <span
+              className={cn(
+                "w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full",
+                config.color,
+              )}
+            />
             <span className={cn("capitalize", config.text)}>{level}</span>
           </div>
         ))}
@@ -96,15 +124,22 @@ export default function SkillsPage() {
               transition={{ delay: catIndex * 0.1 }}
             >
               <div className="mb-4 sm:mb-6 flex items-center gap-3">
-                <motion.div 
-                  className={cn("w-10 h-10 rounded-xl flex items-center justify-center", catColor.iconBg)}
+                <motion.div
+                  className={cn(
+                    "w-10 h-10 rounded-xl flex items-center justify-center",
+                    catColor.iconBg,
+                  )}
                   whileHover={{ rotate: 10, scale: 1.1 }}
                 >
                   <Code2 className="w-5 h-5 text-primary" />
                 </motion.div>
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-display font-bold">{category.name}</h2>
-                  <p className="text-sm sm:text-base text-muted-foreground">{category.description}</p>
+                  <h2 className="text-xl sm:text-2xl font-display font-bold">
+                    {category.name}
+                  </h2>
+                  <p className="text-sm sm:text-base text-muted-foreground">
+                    {category.description}
+                  </p>
                 </div>
               </div>
 
@@ -123,26 +158,30 @@ export default function SkillsPage() {
                         "glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4 relative overflow-hidden group cursor-default border",
                         "bg-gradient-to-br",
                         config.bg,
-                        config.border
+                        config.border,
                       )}
                     >
                       {/* Proficiency indicator */}
-                      <motion.div 
+                      <motion.div
                         className={cn(
                           "absolute top-2 right-2 sm:top-3 sm:right-3 w-2 h-2 rounded-full",
-                          config.color
+                          config.color,
                         )}
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       />
 
-                      <span className="font-medium text-xs sm:text-sm">{skill.name}</span>
+                      <span className="font-medium text-xs sm:text-sm">
+                        {skill.name}
+                      </span>
 
                       {/* Hover gradient */}
-                      <div className={cn(
-                        "absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-br",
-                        config.bg.replace('/15', '/25').replace('/10', '/20')
-                      )} />
+                      <div
+                        className={cn(
+                          "absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-br",
+                          config.bg.replace("/15", "/25").replace("/10", "/20"),
+                        )}
+                      />
                     </motion.div>
                   );
                 })}
@@ -162,35 +201,37 @@ export default function SkillsPage() {
         {/* Decorative gradients */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 via-accent/5 to-transparent rounded-bl-full" />
         <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-cyan/10 to-transparent rounded-tr-full" />
-        
+
         <h2 className="text-xl sm:text-2xl font-display font-bold mb-4 sm:mb-6 text-center flex items-center justify-center gap-2 relative">
           <Sparkles className="w-5 h-5 text-primary" />
           All <span className="gradient-text">Technologies</span>
         </h2>
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 relative">
-          {skillCategories.flatMap(cat => cat.skills).map((skill, index) => {
-            const config = proficiencyConfig[skill.proficiency];
-            return (
-              <motion.span
-                key={skill.name}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.015 }}
-                whileHover={{ scale: 1.1 }}
-                className={cn(
-                  "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors cursor-default border",
-                  skill.proficiency === 'expert' 
-                    ? "bg-gradient-to-r from-emerald/10 to-cyan/10 text-emerald border-emerald/20" 
-                    : skill.proficiency === 'advanced'
-                    ? "bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-primary/20"
-                    : "bg-gradient-to-r from-amber/10 to-orange/10 text-amber border-amber/20"
-                )}
-              >
-                {skill.name}
-              </motion.span>
-            );
-          })}
+          {skillCategories
+            .flatMap((cat) => cat.skills)
+            .map((skill, index) => {
+              const config = proficiencyConfig[skill.proficiency];
+              return (
+                <motion.span
+                  key={skill.name}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.015 }}
+                  whileHover={{ scale: 1.1 }}
+                  className={cn(
+                    "px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors cursor-default border",
+                    skill.proficiency === "expert"
+                      ? "bg-gradient-to-r from-emerald/10 to-cyan/10 text-emerald border-emerald/20"
+                      : skill.proficiency === "advanced"
+                        ? "bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-primary/20"
+                        : "bg-gradient-to-r from-amber/10 to-orange/10 text-amber border-amber/20",
+                  )}
+                >
+                  {skill.name}
+                </motion.span>
+              );
+            })}
         </div>
       </motion.section>
     </div>
