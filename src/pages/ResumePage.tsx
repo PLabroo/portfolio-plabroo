@@ -1,16 +1,41 @@
-import { motion } from 'framer-motion';
-import { Download, ExternalLink, Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
-import { portfolioData } from '@/data/portfolio';
-import { staggerContainer, staggerItem } from '@/components/layout/PageTransition';
-import { Button } from '@/components/ui/button';
+import { motion } from "framer-motion";
+import {
+  Download,
+  ExternalLink,
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+} from "lucide-react";
+import { portfolioData } from "@/data/portfolio";
+import {
+  staggerContainer,
+  staggerItem,
+} from "@/components/layout/PageTransition";
+import { Button } from "@/components/ui/button";
 
 export default function ResumePage() {
-  const { hero, experience, skillCategories, contact, socialLinks } = portfolioData;
+  const { hero, experience, skillCategories, contact, socialLinks, education } =
+    portfolioData;
 
   const formatDate = (date: string) => {
-    if (date === 'Present') return date;
-    const [year, month] = date.split('-');
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (date === "Present") return date;
+    const [year, month] = date.split("-");
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return `${months[parseInt(month) - 1]} ${year}`;
   };
 
@@ -23,19 +48,19 @@ export default function ResumePage() {
         animate="show"
         className="text-center"
       >
-        <motion.span 
+        <motion.span
           variants={staggerItem}
           className="inline-block px-4 py-1.5 rounded-full glass-card text-sm font-medium text-primary mb-4 sm:mb-6"
         >
           Resume
         </motion.span>
-        <motion.h1 
+        <motion.h1
           variants={staggerItem}
           className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-2 sm:mb-4"
         >
           <span className="gradient-text">{hero.name}</span>
         </motion.h1>
-        <motion.p 
+        <motion.p
           variants={staggerItem}
           className="text-base sm:text-xl text-muted-foreground"
         >
@@ -66,12 +91,20 @@ export default function ResumePage() {
       >
         {/* Contact Info */}
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-xs sm:text-sm pb-4 sm:pb-6 border-b border-border/30">
-          <a href={`mailto:${contact.email}`} className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors">
+          <a
+            href={`mailto:${contact.email}`}
+            className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
+          >
             <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="truncate max-w-[150px] sm:max-w-none">{contact.email}</span>
+            <span className="truncate max-w-[150px] sm:max-w-none">
+              {contact.email}
+            </span>
           </a>
           {contact.phone && (
-            <a href={`tel:${contact.phone}`} className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors">
+            <a
+              href={`tel:${contact.phone}`}
+              className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
+            >
               <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               {contact.phone}
             </a>
@@ -80,8 +113,8 @@ export default function ResumePage() {
             <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             {contact.location}
           </span>
-          <a 
-            href={socialLinks.find(l => l.platform === 'linkedin')?.url}
+          <a
+            href={socialLinks.find((l) => l.platform === "linkedin")?.url}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
@@ -89,8 +122,8 @@ export default function ResumePage() {
             <Linkedin className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             LinkedIn
           </a>
-          <a 
-            href={socialLinks.find(l => l.platform === 'github')?.url}
+          <a
+            href={socialLinks.find((l) => l.platform === "github")?.url}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 sm:gap-2 hover:text-primary transition-colors"
@@ -102,7 +135,9 @@ export default function ResumePage() {
 
         {/* Summary */}
         <section>
-          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">Professional Summary</h2>
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">
+            Professional Summary
+          </h2>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             {hero.description}
           </p>
@@ -110,10 +145,12 @@ export default function ResumePage() {
 
         {/* Experience */}
         <section>
-          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">Experience</h2>
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">
+            Experience
+          </h2>
           <div className="space-y-4 sm:space-y-6">
             {experience.map((exp) => (
-              <motion.div 
+              <motion.div
                 key={exp.id}
                 initial={{ opacity: 0, x: -10 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -122,8 +159,12 @@ export default function ResumePage() {
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2 mb-2">
                   <div>
-                    <h3 className="font-bold text-sm sm:text-base">{exp.role}</h3>
-                    <p className="text-primary text-xs sm:text-sm">{exp.company} • {exp.industry}</p>
+                    <h3 className="font-bold text-sm sm:text-base">
+                      {exp.role}
+                    </h3>
+                    <p className="text-primary text-xs sm:text-sm">
+                      {exp.company} • {exp.industry}
+                    </p>
                   </div>
                   <span className="text-xs sm:text-sm text-muted-foreground flex-shrink-0">
                     {formatDate(exp.startDate)} – {formatDate(exp.endDate)}
@@ -144,13 +185,15 @@ export default function ResumePage() {
 
         {/* Skills */}
         <section>
-          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">Skills</h2>
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-3 sm:mb-4 text-primary">
+            Skills
+          </h2>
           <div className="space-y-2 sm:space-y-3">
             {skillCategories.map((category) => (
               <div key={category.name} className="text-sm sm:text-base">
                 <span className="font-semibold">{category.name}: </span>
                 <span className="text-muted-foreground">
-                  {category.skills.map(s => s.name).join(', ')}
+                  {category.skills.map((s) => s.name).join(", ")}
                 </span>
               </div>
             ))}
@@ -159,13 +202,19 @@ export default function ResumePage() {
 
         {/* Education */}
         <section>
-          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">Education</h2>
+          <h2 className="text-lg sm:text-xl font-display font-bold mb-2 sm:mb-3 text-primary">
+            Education
+          </h2>
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-2">
             <div>
-              <h3 className="font-bold text-sm sm:text-base">Bachelor of Technology</h3>
-              <p className="text-muted-foreground text-xs sm:text-sm">Aryabhatta Knowledge University</p>
+              <h3 className="font-bold text-sm sm:text-base">{`${education.domain} in ${education.branch}`}</h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">
+                {education.college}
+              </p>
             </div>
-            <span className="text-xs sm:text-sm text-muted-foreground">Aug 2017 – Oct 2021</span>
+            <span className="text-xs sm:text-sm text-muted-foreground">
+              {education.duration}
+            </span>
           </div>
         </section>
       </motion.div>

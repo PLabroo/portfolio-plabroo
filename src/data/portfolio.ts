@@ -203,6 +203,13 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
+  education:{
+    domain:"Bachelor of Engineering",
+    branch:"Computer Science",
+    college:"JSS Science and Technology University",
+    duration:"2017-2021"
+  },
+
   projects: [
     {
       id: 'acadex',
@@ -285,8 +292,8 @@ export const portfolioData: PortfolioData = {
     {
       id: '1',
       quote: 'Prateek is an exceptional engineer with deep expertise in frontend development and performance optimization. His work on accessibility-compliant components and payment integrations significantly improved our product quality and user experience.',
-      author: 'Team Lead',
-      role: 'Engineering Manager',
+      author: 'Vaibhav Kumar',
+      role: 'Senior Software Engineer',
       company: 'KFintech',
     },
   ],
@@ -358,6 +365,12 @@ export const portfolioData: PortfolioData = {
       icon: 'Rocket',
     },
   ],
+
+  emailjsConfig:{
+    publicKey:"th0A-KVSYM9GlnJTc",
+    serviceId:"service_qzgq94s",
+    templateId:"template_avwi794"
+  }
 };
 
 export default portfolioData;

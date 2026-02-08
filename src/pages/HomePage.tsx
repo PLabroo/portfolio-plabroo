@@ -477,7 +477,7 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid lg:grid-cols-1 gap-6 mb-6">
           <GitHubStats username="PLabroo" />
           <LeetCodeStats username="PLabroo" />
         </div>
@@ -634,8 +634,8 @@ export default function HomePage() {
             >
               Let's Build Something
               <motion.span 
-                className="gradient-text block mt-2"
-                whileHover={{ scale: 1.05 }}
+                className="gradient-text block mt-2 p-2"
+                whileHover={{ scale: 0.8 }}
               >
                 Amazing Together
               </motion.span>

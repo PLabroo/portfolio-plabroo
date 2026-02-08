@@ -146,6 +146,19 @@ export interface ProcessStep {
   icon: string;
 }
 
+export interface Education{
+  domain:"Bachelor of Engineering",
+  branch:"Computer Science",
+  college:"JSS Science and Technology University",
+  duration:"2017-2021"
+}
+
+export interface EmailJs{
+  serviceId: string;
+  templateId: string;
+  publicKey: string;
+}
+
 export interface PortfolioData {
   meta: MetaInfo;
   navigation: NavigationItem[];
@@ -161,4 +174,6 @@ export interface PortfolioData {
   socialLinks: SocialLink[];
   uses: UseItem[];
   process: ProcessStep[];
+  education:Education;
+  emailjsConfig:EmailJs;
 }
